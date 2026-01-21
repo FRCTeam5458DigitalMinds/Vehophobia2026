@@ -19,7 +19,7 @@ public class Limelight extends SubsystemBase{
    
    //info from tag
    int id;
-
+   
    //Change smartdashboard to elastic later
     // Basic targeting data
    public Double getTX(){
@@ -29,6 +29,9 @@ public class Limelight extends SubsystemBase{
    }
    public Double getTY(){
       return LimelightHelpers.getTY(name); // Vertical offset from crosshair to target in degrees
+   }
+   public Double getTA(){
+      return LimelightHelpers.getTA(name);
    }
    public boolean checkForTarget(){
       return LimelightHelpers.getTV(name); // Do you have a valid target?
