@@ -18,8 +18,12 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.NotAShooter;
 import frc.robot.commands.Autoalign;
+import frc.robot.commands.notShooting;
+import frc.robot.commands.stopNotShooting;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -39,6 +43,10 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final Limelight limelight = new Limelight();
+
+    public final LED led = new LED();
+
+    public final NotAShooter notShooter = new NotAShooter();
 
     public RobotContainer() {
         configureBindings();
@@ -80,6 +88,11 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        joystick.back().onTrue(led.switchLED());
+
+        joystick.start().onTrue(new notShooting(notShooter,limelight));
+        joystick.start().onFalse(new stopNotShooting(notShooter));
 
         joystick.y().whileTrue(new Autoalign(limelight, drivetrain,MaxAngularRate));
     }

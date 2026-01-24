@@ -51,9 +51,20 @@ public final class Constants {
     {
         //given in radians, inches respectively
         //32.6 deg op 2
-        public static final double limelightMountingAngle = .546;
-        public static final double limelightMountingHeight = .16002;    
         public static final String limeName = "limelight-digital";
+        public static final double distThreshold = 5; //Distance from center of tag 
+
     }
 
+    public static final class LEDConstants
+    {
+        public static final double ledNum = 3; 
+    }
+    public static final class NotAShooterConstants{
+        public static final int notAShooterID = 13;
+
+        public static final double notAShooterkP = 0.05;
+        public static final double notAShooterkI = 0;
+        public static final double notAShooterkD = 0;
+    }
 }
