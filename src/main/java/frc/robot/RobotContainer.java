@@ -89,11 +89,14 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
+        //LED testing
         joystick.back().onTrue(led.switchLED());
 
-        joystick.start().onTrue(new notShooting(notShooter,limelight));
+        //Shooter
+        joystick.start().onTrue(new notShooting(notShooter,limelight, joystick));
         joystick.start().onFalse(new stopNotShooting(notShooter));
 
+        //Auto-Align test
         joystick.y().whileTrue(new Autoalign(limelight, drivetrain,MaxAngularRate));
     }
 

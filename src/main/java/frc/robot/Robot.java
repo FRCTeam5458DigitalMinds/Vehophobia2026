@@ -7,7 +7,9 @@ package frc.robot;
 import com.ctre.phoenix6.HootAutoReplay;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
@@ -29,6 +31,11 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
+        // Retrieves the voltage currently entering the roboRIO
+        double batteryVoltage = RobotController.getBatteryVoltage();
+    
+        // Sends the value to SmartDashboard under the key "Battery Voltage"
+        SmartDashboard.putNumber("Battery Voltage", batteryVoltage);
         CommandScheduler.getInstance().run(); 
     }
 

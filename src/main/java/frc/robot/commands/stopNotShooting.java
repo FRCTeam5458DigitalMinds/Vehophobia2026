@@ -1,21 +1,20 @@
 package frc.robot.commands;
 
-import java.io.NotActiveException;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NotAShooter;
 
 public class stopNotShooting extends Command {
-    NotAShooter nShooterMotor;
+    NotAShooter nShooter;
 
     public stopNotShooting(NotAShooter notaShooter){
-        this.nShooterMotor = notaShooter;
+        this.nShooter = notaShooter;
 
         addRequirements(notaShooter);
     }
 
     public void initialize(){
-        nShooterMotor.runElMotor(0);
+        nShooter.runShooterMotor(0);
+        nShooter.runIndexerMotor(0);
     }
 
     public void execute(){

@@ -21,6 +21,8 @@ public class Limelight extends SubsystemBase{
    //info from tag
    int id;
    
+   private LimelightHelpers.PoseEstimate limelightMeasurement = new LimelightHelpers.PoseEstimate();
+
    //Change smartdashboard to elastic later
     // Basic targeting data
    public Double getTX(){
@@ -64,7 +66,6 @@ public class Limelight extends SubsystemBase{
 
     //invert since tx is positive when the target is to the right of the crosshair
     targetingAngularVelocity *= -1.0;
-
     
     return targetingAngularVelocity;
   }

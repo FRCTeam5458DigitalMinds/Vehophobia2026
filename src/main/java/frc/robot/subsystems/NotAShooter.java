@@ -10,14 +10,22 @@ public class NotAShooter extends SubsystemBase{
     
     TalonFX notAShooterMotor = new TalonFX(Constants.NotAShooterConstants.notAShooterID);
 
+    TalonFX notIndexMotor = new TalonFX(Constants.NotAShooterConstants.notIndexerID);
+
     public NotAShooter(){
         //notAShooterMotor.getConfigurator().apply(new TalonFXConfiguration());
 
         TalonFXConfiguration notAShooterMotorConfigs = new TalonFXConfiguration();
+        TalonFXConfiguration notAIndexMotorConfigs = new TalonFXConfiguration();
 
         notAShooterMotorConfigs.CurrentLimits.withStatorCurrentLimit(20);
         notAShooterMotorConfigs.Voltage.withPeakForwardVoltage(8);
         notAShooterMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(20)
+            .withPeakReverseTorqueCurrent(-20);
+        
+        notAIndexMotorConfigs.CurrentLimits.withStatorCurrentLimit(20);
+        notAIndexMotorConfigs.Voltage.withPeakForwardVoltage(8);
+        notAIndexMotorConfigs.TorqueCurrent.withPeakForwardTorqueCurrent(20)
             .withPeakReverseTorqueCurrent(-20);
         
         notAShooterMotorConfigs.Slot0.kP = Constants.NotAShooterConstants.notAShooterkP;
@@ -25,13 +33,15 @@ public class NotAShooter extends SubsystemBase{
         notAShooterMotorConfigs.Slot0.kD = Constants.NotAShooterConstants.notAShooterkD;
 
         notAShooterMotor.getConfigurator().apply(notAShooterMotorConfigs);
+        notIndexMotor.getConfigurator().apply(notAIndexMotorConfigs);
     }
 
-    public void runElMotor(double Velocidad){
+    public void runShooterMotor(double Velocidad){
         Velocidad /= 100;
         notAShooterMotor.set(Velocidad);
     }
-
-    
-
+    public void runIndexerMotor(double Velocidad){
+        Velocidad /= 100;
+        notIndexMotor.set(Velocidad);
+    }
 }
