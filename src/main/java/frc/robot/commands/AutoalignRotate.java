@@ -6,7 +6,7 @@ import frc.robot.subsystems.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-public class Autoalign extends Command {
+public class AutoalignRotate extends Command {
 
     Limelight LIMELIGHT;
     CommandSwerveDrivetrain DRIVETRAIN;
@@ -15,7 +15,7 @@ public class Autoalign extends Command {
 
     Double maxAnglSpeed; //Max Angular Speed
 
-    public Autoalign(Limelight limelight, CommandSwerveDrivetrain drivetrain, Double maxAngularSpeed) 
+    public AutoalignRotate(Limelight limelight, CommandSwerveDrivetrain drivetrain, Double maxAngularSpeed) 
     {
         this.LIMELIGHT = limelight;
         this.DRIVETRAIN = drivetrain;

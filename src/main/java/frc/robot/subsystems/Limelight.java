@@ -23,7 +23,9 @@ public class Limelight extends SubsystemBase{
    
    private LimelightHelpers.PoseEstimate limelightMeasurement = new LimelightHelpers.PoseEstimate();
 
-   LimelightHelpers.setPipelineIndex(name,2);
+   public Limelight(){   
+      LimelightHelpers.setPipelineIndex(name,2);
+   }
    //Change smartdashboard to elastic later
     // Basic targeting data
    public Double getTX(){
@@ -69,6 +71,19 @@ public class Limelight extends SubsystemBase{
     targetingAngularVelocity *= -1.0;
     
     return targetingAngularVelocity;
+  }
+  public double limelight_range_proportional(Double robotMaxLinearSpeed)
+  {    
+    double AutoalignkP = 1.0; 
+
+    double targetingLinearVelocity = getTY() * AutoalignkP;
+
+    // convert to radians per second for our drive method
+    targetingLinearVelocity *= robotMaxLinearSpeed;
+
+    targetingLinearVelocity *= -1.0;
+    
+    return targetingLinearVelocity;
   }
 }
 

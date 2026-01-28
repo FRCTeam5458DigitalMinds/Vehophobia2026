@@ -21,8 +21,8 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.FuelShooter;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.FuelShooter;
-import frc.robot.commands.Autoalign;
+import frc.robot.commands.AutoalignLinear;
+import frc.robot.commands.AutoalignRotate;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -42,6 +42,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final Limelight limelight = new Limelight();
+
 
     public final LED led = new LED();
 
@@ -84,7 +85,7 @@ public class RobotContainer {
 
 
         // Reset the field-centric heading on left bumper press.
-        joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        joystick.start().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -100,9 +101,10 @@ public class RobotContainer {
             )
         );
 
-
         //Auto-Align test
-        joystick.y().whileTrue(new Autoalign(limelight, drivetrain,MaxAngularRate));
+        joystick.leftBumper().whileTrue(new AutoalignRotate(limelight, drivetrain,MaxAngularRate));
+        joystick.rightBumper().whileTrue(new AutoalignLinear(limelight, drivetrain,MaxSpeed));
+
     }
 
     public Command getAutonomousCommand() {
