@@ -23,6 +23,7 @@ public class Limelight extends SubsystemBase{
    
    private LimelightHelpers.PoseEstimate limelightMeasurement = new LimelightHelpers.PoseEstimate();
 
+   LimelightHelpers.setPipelineIndex(name,2);
    //Change smartdashboard to elastic later
     // Basic targeting data
    public Double getTX(){

@@ -18,12 +18,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.FuelShooter;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.NotAShooter;
+import frc.robot.subsystems.FuelShooter;
 import frc.robot.commands.Autoalign;
-import frc.robot.commands.notShooting;
-import frc.robot.commands.stopNotShooting;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -46,7 +45,7 @@ public class RobotContainer {
 
     public final LED led = new LED();
 
-    public final NotAShooter notShooter = new NotAShooter();
+    public final FuelShooter fuelShooter = new FuelShooter();
 
     public RobotContainer() {
         configureBindings();
@@ -92,9 +91,15 @@ public class RobotContainer {
         //LED testing
         joystick.back().onTrue(led.switchLED());
 
-        //Shooter
-        joystick.start().onTrue(new notShooting(notShooter,limelight, joystick));
-        joystick.start().onFalse(new stopNotShooting(notShooter));
+        //Shooter on the trigger(R)
+        joystick.axisGreaterThan(3,0.05).whileTrue(
+
+            fuelShooter.runEnd(
+                () -> fuelShooter.runShooterMotor(60),
+                fuelShooter::stopMotors
+            )
+        );
+
 
         //Auto-Align test
         joystick.y().whileTrue(new Autoalign(limelight, drivetrain,MaxAngularRate));
