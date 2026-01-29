@@ -35,6 +35,7 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
+    //telemetry ; RoBOT data
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
@@ -103,7 +104,7 @@ public class RobotContainer {
 
         //Auto-Align test
         joystick.leftBumper().whileTrue(new AutoalignRotate(limelight, drivetrain,MaxAngularRate));
-        joystick.rightBumper().whileTrue(new AutoalignLinear(limelight, drivetrain,MaxSpeed));
+        //joystick.rightBumper().whileTrue(new AutoalignLinear(limelight, drivetrain,MaxSpeed));
 
     }
 

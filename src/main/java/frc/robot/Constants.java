@@ -6,11 +6,12 @@ public final class Constants {
     
     public static final class LimelightConstants
     {
-        //given in radians, inches respectively
-        //32.6 deg op 2
         public static final String limeName = "limelight-digital";
         public static final double distThreshold = 5; //Distance from center of tag 
         public static final int pipeline = 2;    /// Night (2)
+        
+        public static final double[] redHubTags = {7.0,10.0};
+        public static final double[] blueHubTags = {25.0,26.0};
     }
 
     public static final class LEDConstants

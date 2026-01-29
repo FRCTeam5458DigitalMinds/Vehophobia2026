@@ -47,7 +47,7 @@ public class AutoalignLinear extends Command {
                 DRIVETRAIN.setControl(robotDrive.withVelocityX(lineSpeed));
 
                 //If crosshair is between these horizontal values , stop
-                if (-2.3 < LIMELIGHT.getTY() && LIMELIGHT.getTY() < -2.0){
+                if (8.0 < LIMELIGHT.getTY() && LIMELIGHT.getTY() < 10.0){
                     isClose = true;
                 }
 

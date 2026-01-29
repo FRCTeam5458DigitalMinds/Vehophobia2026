@@ -9,6 +9,8 @@ public class LED extends SubsystemBase{
     Solenoid LED = new Solenoid(0, PneumaticsModuleType.CTREPCM, 3);
     
     public Command switchLED(){
+
+        //toggles the LED
         return this.runOnce(() -> LED.toggle());
     }
 }

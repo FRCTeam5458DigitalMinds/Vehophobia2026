@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
@@ -15,41 +16,73 @@ public class Limelight extends SubsystemBase{
    CommandSwerveDrivetrain drivetrain;
    SwerveRequest.RobotCentric robotDrive;
    
-   //name of limelight (don't forget)
-   String name = Constants.LimelightConstants.limeName;
+   //name of limelight IDs (don't forget)
+   String dmllName = Constants.LimelightConstants.limeName;
    
    //info from tag
    int id;
    
+   //Target values for ID
+   double target_tx = 1; //will replace when we find proper value
+   double target_ty = 1; //same as comment
+
+//pose thingys
    private LimelightHelpers.PoseEstimate limelightMeasurement = new LimelightHelpers.PoseEstimate();
 
    public Limelight(){   
-      LimelightHelpers.setPipelineIndex(name,2);
+      //
+      LimelightHelpers.setPipelineIndex(dmllName,2);
    }
    //Change smartdashboard to elastic later
     // Basic targeting data
    public Double getTX(){
-      double tx = LimelightHelpers.getTX(name);
-      SmartDashboard.putNumber("TX", tx);
-      return tx; // Horizontal offset from crosshair to target in degrees
+      //Take tx of current tag
+      //double tx = LimelightHelpers.getTX(dmllName);
+      //SmartDashboard.putNumber("TX", tx);
+      return LimelightHelpers.getTX(dmllName); // Horizontal offset from crosshair to target in degrees
+
    }
+
+   //just up and down off of the crosshair
    public Double getTY(){
-      return LimelightHelpers.getTY(name); // Vertical offset from crosshair to target in degrees
+
+      double ty = LimelightHelpers.getTY(dmllName);
+      SmartDashboard.putNumber("TY", ty);
+      return ty; // Vertical offset from crosshair to target in degrees
    }
+
+   //Output for TA (Target Area)
    public Double getTA(){
-      return LimelightHelpers.getTA(name);
+      return LimelightHelpers.getTA(dmllName);
    }
+
+   //Target stuff 
    public boolean checkForTarget(){
-      return LimelightHelpers.getTV(name); // Do you have a valid target?
+      return LimelightHelpers.getTV(dmllName); // Do you have a valid target?
    }
+
+   //current id for the Dashboard
    public Double getTargetID(){
 
       Double dTarget = Double.parseDouble("0");
 
-      dTarget = LimelightHelpers.getFiducialID(name);
+      //return the ID
+      dTarget = LimelightHelpers.getFiducialID(dmllName);
+      SmartDashboard.putNumber("LL-ID", dTarget);
       return dTarget;
    }
    
+   //helps tell wheather it is a Hub ID
+   public boolean CheckHubTarget(double dTagID){
+      boolean rStatus = false;
+
+      for (double dHubID : Constants.LimelightConstants.redHubTags){
+         if (dHubID == dTagID){
+            rStatus = true;
+         }
+      }
+      return rStatus;
+   }
    //
   public double limelight_aim_proportional(Double robotMaxAngularSpeed)
   {    
@@ -72,6 +105,7 @@ public class Limelight extends SubsystemBase{
     
     return targetingAngularVelocity;
   }
+
   public double limelight_range_proportional(Double robotMaxLinearSpeed)
   {    
     double AutoalignkP = 1.0; 
@@ -82,6 +116,20 @@ public class Limelight extends SubsystemBase{
     targetingLinearVelocity *= robotMaxLinearSpeed;
 
     targetingLinearVelocity *= -1.0;
+    
+    return targetingLinearVelocity;
+  }
+
+  public double limelight_left_side_proportional(Double robotMaxLinearSpeed)
+  {    
+    double AutoalignkP = 1.0; 
+
+    double targetingLinearVelocity = target_tx * AutoalignkP; //replace target_tx abo
+
+    // convert to radians per second for our drive method
+    targetingLinearVelocity *= robotMaxLinearSpeed;
+
+    targetingLinearVelocity *= -1.0; //might change once testing begins
     
     return targetingLinearVelocity;
   }
