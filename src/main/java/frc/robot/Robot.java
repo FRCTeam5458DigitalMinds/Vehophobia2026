@@ -19,6 +19,8 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer m_robotContainer;
 
+    private final String dmllName = Constants.LimelightConstants.limeName;
+
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
         .withTimestampReplay()
@@ -37,15 +39,19 @@ public class Robot extends TimedRobot {
         // Sends the value to SmartDashboard under the key "Battery Voltage"
         SmartDashboard.putNumber("Battery Voltage", batteryVoltage);
         CommandScheduler.getInstance().run(); 
+        
     }
 
     @Override
     public void disabledInit() {
-        NetworkTableInstance.getDefault().getTable(Constants.LimelightConstants.limeName).getEntry("throttle_set").setNumber(100);
+        NetworkTableInstance.getDefault().getTable(dmllName).getEntry("throttle_set").setNumber(100);
     }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        LimelightHelpers.SetIMUMode(dmllName, 1); // Seed internal IMU
+
+    }
 
     @Override
     public void disabledExit() {}
@@ -57,23 +63,31 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
+        NetworkTableInstance.getDefault().getTable(dmllName).getEntry("throttle_set").setNumber(0);
+
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        LimelightHelpers.SetIMUMode(dmllName, 4);
+    }
 
     @Override
     public void autonomousExit() {}
 
     @Override
     public void teleopInit() {
+        NetworkTableInstance.getDefault().getTable(dmllName).getEntry("throttle_set").setNumber(0);
+
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        LimelightHelpers.SetIMUMode(dmllName, 4);
+    }
 
     @Override
     public void teleopExit() {}

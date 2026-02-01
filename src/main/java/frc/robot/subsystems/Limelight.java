@@ -31,7 +31,7 @@ public class Limelight extends SubsystemBase{
 
    public Limelight(){   
       //
-      LimelightHelpers.setPipelineIndex(dmllName,2);
+      LimelightHelpers.setPipelineIndex(dmllName,Constants.LimelightConstants.pipeline);
    }
    //Change smartdashboard to elastic later
     // Basic targeting data
