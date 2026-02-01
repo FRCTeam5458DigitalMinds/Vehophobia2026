@@ -237,7 +237,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void periodic() {
         //5458 Stuff(See implentation below)
         updateOdometry();
-        m_field.setRobotPose(getPose());
+
 
         /*
 
@@ -340,7 +340,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     //Updates the position of the robot
     public void updateOdometry() {
-
+        m_field.setRobotPose(getPose());
         m_poseEstimator.update(
             pigeon.getRotation2d(),
             getState().ModulePositions);
@@ -365,7 +365,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         {
 
         LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,999999));
         m_poseEstimator.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);
