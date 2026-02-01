@@ -77,6 +77,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        //Removes throttling(slowdown) of the limelight
         NetworkTableInstance.getDefault().getTable(dmllName).getEntry("throttle_set").setNumber(0);
 
         if (m_autonomousCommand != null) {

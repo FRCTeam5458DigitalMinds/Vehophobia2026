@@ -140,7 +140,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
-
+        //Puts field onto Elastic
         SmartDashboard.putData("Field", m_field);
     }
 
@@ -235,9 +235,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
-        //5458 Stuff
+        //5458 Stuff(See implentation below)
         updateOdometry();
         m_field.setRobotPose(getPose());
+
         /*
 
          * Periodically try to apply the operator perspective.
@@ -321,10 +322,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
 
     //All code here done by 5458
+
+    //Sets up field and pigeon objects
     private final Field2d m_field = new Field2d();
     private final Pigeon2 pigeon = new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id);
 
 
+    //Configures the pose estimator based on swerve drive encoders + pigeon
     private final SwerveDrivePoseEstimator m_poseEstimator =
     new SwerveDrivePoseEstimator(
         getKinematics(),
@@ -334,7 +338,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         VecBuilder.fill(1.5, 1.5, Units.degreesToRadians(5)),
         VecBuilder.fill(1.5, 1.5, Units.degreesToRadians(30)));
 
-
+    //Updates the position of the robot
     public void updateOdometry() {
 
         m_poseEstimator.update(
@@ -346,22 +350,29 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limeName);
         
-        if(Math.abs(pigeon.getYaw().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        if(Math.abs(pigeon.getAngularVelocityZDevice().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         {
         doRejectUpdate = true;
         }
+
         if(mt2.tagCount == 0)
         {
+
         doRejectUpdate = true;
         }
+
         if(!doRejectUpdate)
         {
+
+        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
         m_poseEstimator.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);
         }
     }
+
+    //gets the pose of the robot
     public Pose2d getPose()
     {
         return m_poseEstimator.getEstimatedPosition();
