@@ -3,7 +3,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.RawFiducial;
 import frc.robot.subsystems.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -40,25 +46,76 @@ public class AutoalignRotate extends Command {
     {
         //Used for do while loop
         boolean isCentered = false;
+        int crtTargetID = 0;
+        double currentTXNC = 0.0;
 
-        //checks for apriltag
-        if (LIMELIGHT.checkForTarget() && LIMELIGHT.CheckHubTarget(LIMELIGHT.getTargetID())){
-            do {
-                //Runs function to get turn speed
-                double turnSpeed = LIMELIGHT.limelight_aim_proportional(maxAnglSpeed);
-                LIMELIGHT.getTY();
-                //Puts target speed onto smartdashboard (move to elastic)
-                SmartDashboard.putNumber("Target turn speed", turnSpeed);
-                //Uses turn speed to run robot
-                DRIVETRAIN.setControl(robotDrive.withRotationalRate(turnSpeed));
+        RawFiducial[] currentFiducials = LIMELIGHT.getFiducialData();
+        List<Integer> alCurrentTargetsIDs = new ArrayList<>();
 
-                //If crosshair is between these horizontal values , stop
-                if (-5.0 < LIMELIGHT.getTX() && LIMELIGHT.getTX() < 5.0){
-                    isCentered = true;
-                }
+        for (RawFiducial fiducial : currentFiducials) {
 
-            } while (isCentered == false); //stop when tag is centered
+            alCurrentTargetsIDs.add(fiducial.id);
         }
+
+        if (alCurrentTargetsIDs.contains(5) && alCurrentTargetsIDs.contains(8) && alCurrentTargetsIDs.contains(9) && alCurrentTargetsIDs.contains(10)){
+            crtTargetID = 9;
+        }
+        else if (alCurrentTargetsIDs.contains(2) && alCurrentTargetsIDs.contains(9) && alCurrentTargetsIDs.contains(10) && alCurrentTargetsIDs.contains(11)){
+            crtTargetID = 11;
+        }
+        else if (alCurrentTargetsIDs.contains(8) && alCurrentTargetsIDs.contains(9) && alCurrentTargetsIDs.contains(10)){
+            crtTargetID = 9;
+        }
+        else if (alCurrentTargetsIDs.contains(10) && alCurrentTargetsIDs.contains(11) && alCurrentTargetsIDs.contains(2)){
+            crtTargetID = 11;
+        }
+        else if (alCurrentTargetsIDs.contains(9) && alCurrentTargetsIDs.contains(10) && alCurrentTargetsIDs.contains(11)){
+            crtTargetID = 10;
+        }
+        else if (alCurrentTargetsIDs.contains(9) && alCurrentTargetsIDs.contains(10)){
+            crtTargetID = 10;
+        }
+        else if (alCurrentTargetsIDs.contains(11) && alCurrentTargetsIDs.contains(2)){
+            crtTargetID = 11;
+        }
+        else if (alCurrentTargetsIDs.contains(10)){
+            crtTargetID = 10;
+        }
+
+
+        do{
+            RawFiducial[] crtFiducials = LIMELIGHT.getFiducialData();
+           
+            for (RawFiducial fiducial : crtFiducials) {
+
+                if (fiducial.id == crtTargetID){
+                    currentTXNC = fiducial.txnc; // X offset (no crosshair)
+                }
+            }
+
+            if (crtTargetID != 0){
+
+                    //Runs function to get turn speed
+                    double turnSpeed = LIMELIGHT.limelight_aim_proportional(maxAnglSpeed);
+
+                    SmartDashboard.putNumber("TX", LIMELIGHT.getTX());
+                    SmartDashboard.putNumber("TXNC", currentTXNC);
+
+                    //Puts target speed onto smartdashboard (move to elastic)
+                    SmartDashboard.putNumber("Target turn speed", turnSpeed);
+                    //Uses turn speed to run robot
+                    DRIVETRAIN.setControl(robotDrive.withRotationalRate(turnSpeed));
+
+                    //If crosshair is between these horizontal values , stop
+                    if (-7.0 < currentTXNC && currentTXNC < 7.0){
+                        isCentered = true;
+                    }
+
+                
+            }
+
+        } while (isCentered == false); //stop when tag is centered
+
         //runs "isFinished" function to say how it is done
         isFinished();
     }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -120,18 +122,36 @@ public class Limelight extends SubsystemBase{
     return targetingLinearVelocity;
   }
 
-  public double limelight_left_side_proportional(Double robotMaxLinearSpeed)
-  {    
-    double AutoalignkP = 1.0; 
+  //Raw fiducial data
+  public RawFiducial[] getFiducialData() {
+    // Get raw AprilTag/Fiducial data from the Limelight (assuming default name "limelight")
+   RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(dmllName);
+   
+   return fiducials;
+   /*String dmFiducials = "";
 
-    double targetingLinearVelocity = target_tx * AutoalignkP; //replace target_tx abo
+   for (RawFiducial fiducial : fiducials) {
+        int id = fiducial.id; // Tag ID
+        double txnc = fiducial.txnc; // X offset (no crosshair)
+        double tync = fiducial.tync; // Y offset (no crosshair)
+        double ta = fiducial.ta; // Target area
 
-    // convert to radians per second for our drive method
-    targetingLinearVelocity *= robotMaxLinearSpeed;
+        dmFiducials += ("ID: " + id + ", txnc: " + txnc + ", tync: " + tync + ", ta: " + ta + " # " );
+        // Print or use the data as needed
+       
+      }
+   
+      SmartDashboard.putString("fiducials", dmFiducials);*/
+   }
 
-    targetingLinearVelocity *= -1.0; //might change once testing begins
-    
-    return targetingLinearVelocity;
+
+  //Start to hub auto align V1
+  public double hub_aim(){
+
+   double turn_value = 0.0;
+
+   return turn_value;
   }
+
 }
 

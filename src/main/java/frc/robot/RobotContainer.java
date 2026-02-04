@@ -97,7 +97,7 @@ public class RobotContainer {
         joystick.axisGreaterThan(3,0.05).whileTrue(
 
             fuelShooter.runEnd(
-                () -> fuelShooter.runShooterMotor(60),
+                () -> {fuelShooter.runShooterMotor(60); limelight.getFiducialData();},
                 fuelShooter::stopMotors
             )
         );

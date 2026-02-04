@@ -52,6 +52,7 @@ public class FuelShooter extends SubsystemBase{
     //speed of these things (sets it)
     public void runShooterMotor(double Velocidad){
         Velocidad /= 100;
+        
         fuelShooterMotor.set(Velocidad);
     }
 
