@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -20,6 +23,8 @@ public class Robot extends TimedRobot {
     private final RobotContainer m_robotContainer;
 
     private final String dmllName = Constants.LimelightConstants.limeName;
+    
+    private final Pigeon2 pigeon = new Pigeon2(TunerConstants.kPigeonId);
 
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
@@ -49,7 +54,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        LimelightHelpers.SetIMUMode(dmllName, 1); // Seed internal IMU
+        LimelightHelpers.SetIMUMode(dmllName, 1); // Seed internal IMU (1)
 
     }
 
@@ -69,7 +74,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        LimelightHelpers.SetIMUMode(dmllName, 4);
+        LimelightHelpers.SetIMUMode(dmllName, 0);
     }
 
     @Override
@@ -78,7 +83,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         //Removes throttling(slowdown) of the limelight
-        NetworkTableInstance.getDefault().getTable(dmllName).getEntry("throttle_set").setNumber(0);
+        NetworkTableInstance.getDefault().getTable(dmllName).getEntry("throttle_set").setNumber(4);
 
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
@@ -87,7 +92,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        LimelightHelpers.SetIMUMode(dmllName, 0);
+        LimelightHelpers.SetIMUMode(dmllName, 4);
     }
 
     @Override

@@ -327,7 +327,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final Field2d m_field = new Field2d();
     private final Pigeon2 pigeon = new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id);
 
-
     //Configures the pose estimator based on swerve drive encoders + pigeon
     private final SwerveDrivePoseEstimator m_poseEstimator =
     new SwerveDrivePoseEstimator(
@@ -346,7 +345,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             getState().ModulePositions);
 
         boolean doRejectUpdate = false;
-        
+
         LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limeName);
         
@@ -364,7 +363,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if(!doRejectUpdate)
         {
 
-        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, -m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,999999));
         m_poseEstimator.addVisionMeasurement(
             mt2.pose,
@@ -377,4 +376,5 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     {
         return m_poseEstimator.getEstimatedPosition();
     }
+
 }

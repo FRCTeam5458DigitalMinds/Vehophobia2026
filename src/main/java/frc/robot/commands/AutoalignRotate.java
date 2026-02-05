@@ -84,6 +84,7 @@ public class AutoalignRotate extends Command {
 
 
         do{
+
             RawFiducial[] crtFiducials = LIMELIGHT.getFiducialData();
            
             for (RawFiducial fiducial : crtFiducials) {
@@ -107,11 +108,15 @@ public class AutoalignRotate extends Command {
                     DRIVETRAIN.setControl(robotDrive.withRotationalRate(turnSpeed));
 
                     //If crosshair is between these horizontal values , stop
-                    if (-7.0 < currentTXNC && currentTXNC < 7.0){
+                    if (-7.0 < LIMELIGHT.getTX() && LIMELIGHT.getTX() < 7.0){
                         isCentered = true;
                     }
 
-                
+            }
+            else {
+
+                //End loop in case no tag seen
+                isCentered = true;
             }
 
         } while (isCentered == false); //stop when tag is centered
