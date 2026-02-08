@@ -72,20 +72,8 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
-
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-
-        // Reset the field-centric heading on left bumper press.
+       
+        //Reset the field-centric heading on left bumper press.
         joystick.start().onTrue(
             drivetrain.runOnce(drivetrain::seedFieldCentric));
 
@@ -101,8 +89,8 @@ public class RobotContainer {
                 () -> {fuelShooter.runShooterMotor(60); limelight.getFiducialData();},
                 fuelShooter::stopMotors
             )
-        );
-
+        ); 
+        
         //Auto-Align test
         joystick.leftBumper().whileTrue(new AutoalignRotate(limelight, drivetrain,MaxAngularRate));
         //joystick.rightBumper().whileTrue(new AutoalignLinear(limelight, drivetrain,MaxSpeed));

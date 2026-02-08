@@ -44,19 +44,21 @@ public class AutoalignRotate extends Command {
     //runs 
     public void execute()
     {
-        //Used for do while loop
+        
         boolean isCentered = false;
         int crtTargetID = 0;
         double currentTXNC = 0.0;
 
-        RawFiducial[] currentFiducials = LIMELIGHT.getFiducialData();
-        List<Integer> alCurrentTargetsIDs = new ArrayList<>();
+        
+        RawFiducial[] currentFiducials = LIMELIGHT.getFiducialData(); //this is the raw data from the limelight
+        List<Integer> alCurrentTargetsIDs = new ArrayList<>(); //sets up list of IDs for the field
 
-        for (RawFiducial fiducial : currentFiducials) {
+        for (RawFiducial fiducial : currentFiducials) {//moves raw fiducial ids to target ids
 
             alCurrentTargetsIDs.add(fiducial.id);
         }
 
+        //groups tags & picks a tag
         if (alCurrentTargetsIDs.contains(5) && alCurrentTargetsIDs.contains(8) && alCurrentTargetsIDs.contains(9) && alCurrentTargetsIDs.contains(10)){
             crtTargetID = 9;
         }
@@ -82,11 +84,14 @@ public class AutoalignRotate extends Command {
             crtTargetID = 10;
         }
 
-
+//gets tx from target id, autoaligns, keeps looping until tx centered
         do{
 
+            //gets raw fiducial (again)
+        
             RawFiducial[] crtFiducials = LIMELIGHT.getFiducialData();
-           
+
+      //moves raw fiducial to current target ids, takes only tx of the current target id    
             for (RawFiducial fiducial : crtFiducials) {
 
                 if (fiducial.id == crtTargetID){

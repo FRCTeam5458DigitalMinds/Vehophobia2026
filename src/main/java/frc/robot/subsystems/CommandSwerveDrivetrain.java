@@ -329,7 +329,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     //Configures the pose estimator based on swerve drive encoders + pigeon
     private final SwerveDrivePoseEstimator m_poseEstimator =
-    new SwerveDrivePoseEstimator(
+    new SwerveDrivePoseEstimator(//borrowed from past code
         getKinematics(),
         pigeon.getRotation2d(),
         getState().ModulePositions,
@@ -339,16 +339,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     //Updates the position of the robot
     public void updateOdometry() {
+        //guesses where robot is on the field 
         m_field.setRobotPose(getPose());
+        //updates pose data
         m_poseEstimator.update(
             pigeon.getRotation2d(),
             getState().ModulePositions);
 
         boolean doRejectUpdate = false;
-
+        //sets up robot orientation based on tags
         LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+//sets up megatag 2 
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limeName);
-        
+ 
+        //if robot doesn't see any tags or robot turns too fast, don't update pose
         if(Math.abs(pigeon.getAngularVelocityZDevice().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         {
         doRejectUpdate = true;
@@ -360,10 +364,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         doRejectUpdate = true;
         }
 
+        //updates position based on tag if nothings wrong 
         if(!doRejectUpdate)
         {
 
-        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, -m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limeName, m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,999999));
         m_poseEstimator.addVisionMeasurement(
             mt2.pose,
