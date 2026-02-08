@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -44,8 +45,7 @@ public class RobotContainer {
 
     public final Limelight limelight = new Limelight();
 
-
-    public final LED led = new LED();
+    //public final LED led = new LED();
 
     public final FuelShooter fuelShooter = new FuelShooter();
 
@@ -80,17 +80,16 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         //LED testing
-        joystick.back().onTrue(led.switchLED());
+        //joystick.back().onTrue(led.switchLED());
 
         //Shooter on the trigger(R)
         joystick.axisGreaterThan(3,0.05).whileTrue(
 
             fuelShooter.runEnd(
-                () -> {fuelShooter.runShooterMotor(60); limelight.getFiducialData();},
-                fuelShooter::stopMotors
-            )
+                () -> {fuelShooter.runShooterMotor(60);},
+                fuelShooter::stopMotors)
         ); 
-        
+         //Commands.waitSeconds(1.0);
         //Auto-Align test
         joystick.leftBumper().whileTrue(new AutoalignRotate(limelight, drivetrain,MaxAngularRate));
         //joystick.rightBumper().whileTrue(new AutoalignLinear(limelight, drivetrain,MaxSpeed));

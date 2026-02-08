@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -11,6 +14,7 @@ public class FuelShooter extends SubsystemBase{
 
     TalonFX fuelIndexMotor = new TalonFX(Constants.FuelShooterConstants.fuelIndexerID);
 
+    Solenoid LED = new Solenoid(0, PneumaticsModuleType.CTREPCM, 3);
 
 
     public FuelShooter()
@@ -52,10 +56,9 @@ public class FuelShooter extends SubsystemBase{
     //speed of these things (sets it)
     public void runShooterMotor(double Velocidad){
         Velocidad /= 100;
-        
         fuelShooterMotor.set(Velocidad);
+        LED.set(true);
     }
-
 
     //More of that
     public void runIndexerMotor(double Velocidad){
@@ -68,8 +71,7 @@ public class FuelShooter extends SubsystemBase{
     public void stopMotors(){
         fuelShooterMotor.set(0);
         fuelIndexMotor.set(0);
+        LED.set(false);
     }
-
-
 }
 
